@@ -7,23 +7,47 @@
 		Remove this if you use the .htaccess -->
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 
-		<title>Dynamic svg</title>
+		<title>container align</title>
 		<meta name="description" content="" />
 		<meta name="author" content="mwortel" />
 
 		<meta name="viewport" content="width=device-width; initial-scale=1.0" />
 
-		<script type="text/javascript" src="jquery-1.7.2.min.js"></script>
+		<!--<script type="text/javascript" src="jquery-1.7.2.min.js"></script>-->
 
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 		<style type="text/css">
 
-      .active .containerWSpace {
+
+
+      #layer1.focus g.containerSpace {
+        //display: none;
+        stroke-opacity:0.3;
+        fill-opacity:0.1;
+      }
+      #layer1.focus g.container {
         display: none;
+        stroke-opacity:0.01;
+        fill-opacity:0.2;
       }
 
-      .active .containerWSpace.active {
-        display: inherit;
+
+      g.containerSpace {
+        fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1
+        }
+      .over > g.containerSpace {
+         stroke-width:2px; stroke:#930; fill:#ff0; fill-opacity:0.9
+      }
+
+      .select > g.containerSpace, #layer1.focus .select > g.containerSpace {
+         stroke-width:2px; stroke:#930; fill:#ff0; fill-opacity:0.9;stroke-opacity:1;
+      }
+
+      #layer1.focus .select > g.container {
+              display: inherit;
+              stroke-opacity:1;
+              fill-opacity:1;
+
       }
 
 
@@ -46,43 +70,6 @@
    width="1000"
    height="1000"
    id="svg2">
-
-<script>
-<![CDATA[
- 
-
-function hasClass(el, name) {
-   return new RegExp('(\\s|^)'+name+'(\\s|$)').test(el.className);
-}
-function addClass(el, name)
-{
-   if (!hasClass(el, name)) { el.className += (el.className ? ' ' : '') +name; }
-   console.log (!hasClass(el, name));
-}
-function removeClass(el, name)
-{
-   if (hasClass(el, name)) {
-      el.className=el.className.replace(new RegExp('(\\s|^)'+name+'(\\s|$)'),' ').replace(/^\s+|\s+$/g, '');
-   }
-}
-
-
-
-function here(evt) {
-  
-  //var block = evt.target;
-  //block.addClass('active');
-this.addClass(this, 'active');
-  console.log(evt);
-
-
-  //block.setAttributeNS(null, "fill", "blue");
-}
-
-
-]]>
-</script>
-
   <defs
      id="defs4" />
   <metadata
@@ -99,23 +86,25 @@ this.addClass(this, 'active');
   </metadata>
   <g 
      id="layer1" class="test">
-    <g class="containerWSpace"  onclick="here(evt)">
+  <svg  class="svgContainer">
+    <g class="containerWSpace">
       <g class="containerSpace"
          transform="translate(1,1)"
          id="csp1"
+         style=""
          >
         <path 
            d="m 92.057819,627.16533 46.028911,26.57481 0,-53.14961 -46.028911,-26.5748 z"
            id="path3276"
-           style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+            />
         <path
            d="m 92.057819,574.01573 46.028911,-26.57481 46.02891,26.57481 -46.02891,26.5748 z"
            id="path3278"
-           style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+            />
         <path
            d="m 138.08673,653.74014 46.02891,-26.57481 0,-53.1496 -46.02891,26.5748 z"
            id="path3280"
-           style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+            />
       </g>
       <g class="container"
          transform="translate(1,1)"
@@ -135,6 +124,8 @@ this.addClass(this, 'active');
            style="stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
       </g>
     </g>
+
+</svg>
 <!--fill:#ff0000;-->
     <!--
     <g
@@ -241,7 +232,55 @@ this.addClass(this, 'active');
 			<script>
 				window.onload = function() {
 
-					var addButton = document.getElementById('addContainers');
+          //var containers =  document.getElementsByClassName('containerWSpace');
+          //var container = document.getElementById('layer1');
+          var container;
+          container = document.getElementById('layer1');
+          //container=document.getElementsByClassName('containerWSpace');
+          //console.log(container);
+
+          container.addEventListener('mouseover', function(e){
+            var g = e.target.parentNode.parentNode;
+            var boxId = g.getAttribute('id');
+            var boxNumber = boxId.substring(3, boxId.length);
+
+            var g2 = document.getElementById('box'+(boxNumber-10).toString());
+//            console.log('box'+(boxNumber-10).toString());
+            g.setAttribute('class',g.getAttribute('class')+' over');
+            g2.setAttribute('class',g.getAttribute('class')+' over');
+
+            //console.log(g);
+          }, false);
+
+          container.addEventListener('mouseout',function(e) {
+            var g = e.target.parentNode.parentNode;
+            var boxId = g.getAttribute('id');
+            var boxNumber = boxId.substring(3, boxId.length);
+
+            var g2 = document.getElementById('box'+(boxNumber-10).toString());
+//            console.log('box'+(boxNumber-10).toString());
+            g.setAttribute('class', g.getAttribute('class').replace(' over', ''));
+            g2.setAttribute('class', g.getAttribute('class').replace(' over', ''));
+
+          },false);
+
+          container.addEventListener('click', function(e) {
+            
+            var g = e.target.parentNode.parentNode;
+            g.setAttribute('class', g.getAttribute('class')+' select');
+            
+            container.setAttribute('class', container.getAttribute('class')+ ' focus');
+            console.log('click', g);
+          }, false);
+
+
+					
+
+
+
+
+
+          var addButton = document.getElementById('addContainers');
           var svgcanvas = document.getElementById('layer1');
 
 
@@ -253,6 +292,7 @@ this.addClass(this, 'active');
               for (var col=2; col>0; col--){
 
                 for (var i=0; i<10; i++) {
+                  
                   n = c.cloneNode();
                   clonex = i * 45 + (col * 46.028904);
                   cloney = i * 26 + (col * -25) + -(row * 35);
@@ -267,11 +307,11 @@ this.addClass(this, 'active');
 
 
 
-window.onload = function() {
-          $(".containerWSpace").click(function(){
+//window.onload = function() {
+          //$(".containerWSpace").click(function(){
 
-            var that = $(this).find('.container');
-            console.log(that[0]);
+            //var that = $(this).find('.container');
+            //console.log(that[0]);
             //this.setAttribute("class", 'active'); 
            
            //var R = document.getElementById("Rect");
@@ -282,9 +322,9 @@ window.onload = function() {
             //$(this).find('.container').setAttributeNS(null, "fill", "blue");
             //$(this).find('.container').show();
             //$('body').toggleClass("class", 'active'); 
-          });
+          //});
 
-};
+//};
 
 
 
