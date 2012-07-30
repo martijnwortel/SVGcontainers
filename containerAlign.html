@@ -18,7 +18,7 @@
 
 
 
-      #layer1.focus g.containerSpace {
+/*      #layer1.focus g.containerSpace {
         //display: none;
         stroke-opacity:0.3;
         fill-opacity:0.1;
@@ -28,37 +28,70 @@
         stroke-opacity:0.01;
         fill-opacity:0.2;
       }
-
+*/
 
 
 
       g.containerSpace {
-        fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:0.6;
+        fill:none;stroke:#9E9E9E;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;
       }
 
       g.container {
-        opacity:0.8;fill:#f09b30;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;
+        /*opacity:0.8;*/fill:#f09b30;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;
       }
-      g.containerWSpace.red  .container {
-        opacity:0.8;fill:#d22525;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;
+      g.containerWSpace[data-content ='3'] .container {
+        /*opacity:0.8;*/fill:#d22525;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;
       }
+      g.containerWSpace[data-content ='2'] .container {
+        /*opacity:0.8;*/fill:#16A02B;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;
+      }
+      g.containerWSpace[data-content ='1'] .container {
+        /*opacity:0.8;*/fill:#d22525;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;
+      }
+
       
       /*style=""*/
       .over > g.containerSpace {
-         stroke-width:2px; stroke:#930; fill:#ff0; fill-opacity:0.9
+        /* stroke-width:2px; stroke:#ff0;*/ fill:#ff0;  fill-opacity:.7;
       }
 
       .select > g.containerSpace, #layer1.focus .select > g.containerSpace {
-         stroke-width:2px; stroke:#930; fill:#ff0; fill-opacity:0.9;stroke-opacity:1;
+         stroke-width:2px; stroke:#930; fill:#ff0; /*fill-opacity:0.9;*/stroke-opacity:1;
       }
 
       #layer1.focus .select > g.container {
               display: inherit;
               stroke-opacity:1;
               fill-opacity:1;
-
       }
 
+
+
+      #layer1.SelectionActive.Column g.col:not(.active) .container, #layer1.SelectionActive.Row g.containerWSpace:not(.rowSelection) .container {
+        display: none;
+      }
+      
+
+      /*[data-col='1'] {
+        display: none;
+      }      
+*/
+
+
+      .containerInfo{
+
+        width: 300px;
+        height: 200px;
+        position: fixed;
+        right: 0;
+        top: 50px;
+      }
+
+      .containerInfo table {
+        width: 100%;
+        border-collapse: collapse;
+        border: 1px solid;
+      }
 
 		</style>
 
@@ -66,7 +99,7 @@
 
 	<body>
 
-<a href="#" id="addContainers" style="display: block;">add containers</a>
+
 
 
 <svg style="border: 1px solid"
@@ -77,7 +110,7 @@
    xmlns="http://www.w3.org/2000/svg"
    version="1.1"
    width="1000"
-   height="1000"
+   height="900"
    id="svg2">
   <defs
      id="defs4" />
@@ -94,9 +127,28 @@
     </rdf:RDF>
   </metadata>
   <g 
-     id="layer1" class="test">
-  <svg  class="svgContainer">
-    <g class="containerWSpace">
+     id="layer1" class="test" data-col=''>
+  <svg class="svgContainer">
+    <g class="containerWSpace"  transform="translate(0, -150)">
+
+      <g class="container"
+         transform="translate(1,1)"
+         id="g3282"
+          >
+        <path
+           d="m 101.2636,621.85037 27.61735,15.94488 0,-31.88976 -27.61735,-15.94488 z"
+           id="path3284"
+            />
+        <path
+           d="m 101.2636,589.96061 46.02891,-26.57481 27.61735,15.94489 -46.02891,26.5748 z"
+           id="path3286"
+            />
+        <path
+           d="m 128.88095,637.79525 46.02891,-26.5748 0,-31.88976 -46.02891,26.5748 z"
+           id="path3288"
+             />
+      </g>
+
       <g class="containerSpace"
          transform="translate(1,1)"
          id="csp1"
@@ -115,23 +167,7 @@
            id="path3280"
             />
       </g>
-      <g class="container"
-         transform="translate(1,1)"
-         id="g3282"
-          >
-        <path
-           d="m 101.2636,621.85037 27.61735,15.94488 0,-31.88976 -27.61735,-15.94488 z"
-           id="path3284"
-            />
-        <path
-           d="m 101.2636,589.96061 46.02891,-26.57481 27.61735,15.94489 -46.02891,26.5748 z"
-           id="path3286"
-            />
-        <path
-           d="m 128.88095,637.79525 46.02891,-26.5748 0,-31.88976 -46.02891,26.5748 z"
-           id="path3288"
-             />
-      </g>
+
     </g>
 
 </svg>
@@ -142,16 +178,8 @@
 
 
 
-
-			
-			<script>
-				window.onload = function() {
-
-
-
-
-
-
+      <script>
+        window.onload = function() {
 
 
           var addButton = document.getElementById('addContainers');
@@ -160,72 +188,114 @@
 
           //addButton.onclick = function(evt){
             //var c = document.querySelector('.containerWSpace'), n, clonex, cloney;
-            var c = document.getElementsByClassName('containerWSpace')[0], n, clonex, cloney, redcontainer;
-            console.log('elementje',c);
+            var c = document.getElementsByClassName('containerWSpace')[0]
+
+
+            var infoContent = document.getElementById('infoContent');
+            var infoNumber = document.getElementById('infoNumber');
+            var infoRow = document.getElementById('infoRow');
+            var infoCol = document.getElementById('infoCol');
+
+            var n; 
+            var clonex; 
+            var cloney
+            var redcontainer;
             var counter = 1;
+            var newGroep, colGroup, activeGroup = [];
+
+            var svgNS = "http://www.w3.org/2000/svg";
+            
+            //create column groups
+            for (var colCount = 5; colCount > 0; colCount--) {
+              newGroup = document.createElementNS(svgNS, "g");
+              newGroup.setAttributeNS(null, "id", "col"+colCount);
+              newGroup.setAttributeNS(null, "class", "col");
+              svgcanvas.appendChild(newGroup);
+            }
+          
 
             for (var row=0; row<5; row++){
-              for (var col=2; col>0; col--){
+              for (var col=5; col>0; col--){
 
-                for (var i=0; i<10; i++) {
+                colGroup = document.getElementById('col'+col);
+
+                for (var depth=0; depth<10; depth++) {
                   
                   n = c.cloneNode(true);
-                  clonex = i * 45 + (col * 46.028904);
-                  cloney = i * 26 + (col * -25) + -(row * 35);
+                  clonex = depth * 45 + (col * 46.028904);
+                  cloney = depth * 26 + (col * -27) + -(row * 55);
                   n.setAttributeNS(null,'transform', 'translate(' + clonex.toString() +',' + cloney.toString() +')');
                   n.setAttributeNS(null, 'id', 'box' + counter);
-                  
+                  n.setAttributeNS(null, 'data-col', col);
+                  n.setAttributeNS(null, 'data-row', row);
+                  n.setAttributeNS(null, 'data-depth', depth);
+                  n.setAttributeNS(null, 'data-id', counter);                  
+
                   redcontainer = Math.floor(Math.random()*3);
                   console.log(redcontainer);
-                  if (redcontainer == 2) {
+                  n.setAttributeNS(null, 'data-content', redcontainer);
+/*                  if (redcontainer == 2) {
                     n.setAttributeNS(null, 'class', n.getAttribute('class') + ' red');
                   }
-                  
-                  svgcanvas.appendChild(n);
+*/                  
+
+                  colGroup.appendChild(n); // add containers to column group
+                  //svgcanvas.appendChild(n);
                   counter++;
                 }
               }
             }
 
-
             c.parentNode.removeChild(c);
-
-
-
-
-
-
 
 
           //var containers =  document.getElementsByClassName('containerWSpace');
           //var container = document.getElementById('layer1');
-          var container;
+          var container, boxId, boxContent, boxCol, boxRow, boxDepth;
+          var column = null, rowSelection =[];
           container = document.getElementById('layer1');
           //container=document.getElementsByClassName('containerWSpace');
           //console.log(container);
 
+
+          //Mousover cell          
           container.addEventListener('mouseover', function(e){
             var g = e.target.parentNode.parentNode;
-            var boxId = g.getAttribute('id');
-            var boxNumber = boxId.substring(3, boxId.length);
 
-            var g2 = document.getElementById('box'+(boxNumber-10).toString());
+            //var boxId = g.getAttribute('id');
+            //var boxNumber = boxId.substring(3, boxId.length);
+            boxId = g.getAttribute('data-id');
+            boxRow = g.getAttribute('data-row');
+            boxCol = g.getAttribute('data-col');
+            boxDepth = g.getAttribute('data-depth');            
+            boxContent = g.getAttribute('data-content');
+            container.setAttribute('data-col', boxCol);
+            infoNumber.innerHTML = boxId;
+            infoContent.innerHTML = boxContent;
+            infoRow.innerHTML = boxRow;
+            infoCol.innerHTML = boxCol;            
+            //console.log(boxCol);
+
+           // var g2 = document.getElementById('box'+(boxNumber-10).toString());
 //            console.log('box'+(boxNumber-10).toString());
             g.setAttribute('class',g.getAttribute('class')+' over');
-            g2.setAttribute('class',g.getAttribute('class')+' over');
+           // g2.setAttribute('class',g.getAttribute('class')+' over');
 
             //console.log(g);
           }, false);
 
+
+
+          //Mousout over cell
           container.addEventListener('mouseout',function(e) {
             var g = e.target.parentNode.parentNode;
-            var boxId = g.getAttribute('id');
-            var boxNumber = boxId.substring(3, boxId.length);
+            //var boxId = g.getAttribute('id');
+            //var boxNumber = boxId.substring(3, boxId.length);
 
-            var g2 = document.getElementById('box'+(boxNumber-10).toString());
+            //var g2 = document.getElementById('box'+(boxNumber-10).toString());
 //            console.log('box'+(boxNumber-10).toString());
             g.setAttribute('class', g.getAttribute('class').replace(' over', ''));
-            g2.setAttribute('class', g.getAttribute('class').replace(' over', ''));
+            //g2.setAttribute('class', g.getAttribute('class').replace(' over', ''));
 
           },false);
 
@@ -239,45 +309,100 @@
           }, false);
 
 
-					
+          //Kolom selectie over cell          
+          document.addEventListener('keydown', function(e){
+              //console.log(e.keyCode);
+              
+              
+              if (svgcanvas.getAttribute('class').indexOf('SelectionActive') == -1) { 
+                svgcanvas.setAttribute('class', svgcanvas.getAttribute('class') + ' SelectionActive');
+              }
+
+              if (e.keyCode == 67) {
+
+                //console.log('show col',  boxCol);
+                
+                //var column = document.querySelectorAll("[data-col='" + boxCol+"']");
+                if (column == null) {
+                  //when key pressed no new column selection
+                  column = document.getElementById('col'+boxCol);  
+                }
+                
+                
+                if (svgcanvas.getAttribute('class').indexOf('Column') == -1) {
+                  svgcanvas.setAttribute('class', svgcanvas.getAttribute('class') + ' Column');
+                }
+                column.setAttribute('class',  'column active');
+                activeGroup.push(column);
+              } else if (e.keyCode == 82) {
+                  console.log('row', boxRow);
+
+                if (svgcanvas.getAttribute('class').indexOf('Row') == -1) {
+                  svgcanvas.setAttribute('class', svgcanvas.getAttribute('class') + ' Row');
+                }
+
+                if (rowSelection.length == 0) {
+                  rowSelection = document.querySelectorAll("[data-row='" + boxRow + "']");
+                  for (var i = 0; i< rowSelection.length; i++) {
+                    rowSelection[i].setAttribute('class', "containerWSpace rowSelection");
+                  }
+                } 
+              }
+
+          }, false);
+
+          document.addEventListener('keyup', function(e){
+              //console.log(e.keyCode);
+              if (e.keyCode == 67) {
+
+                //console.log(activeGroup.length);
+                for (var i=0; i < activeGroup.length; i++){
+                  activeGroup[i].setAttribute('class', 'col');
+                }
+
+                activeGroup = [];
+                console.log(activeGroup.length);
+                //var column = document.querySelectorAll("[data-col='" + boxCol+"']");
+                //var column = document.getElementById('col'+boxCol);
+                
+                if (svgcanvas.getAttribute('class').indexOf('Column') == -1) {
+                  svgcanvas.setAttribute('class', svgcanvas.getAttribute('class') + ' Column');
+                }
+
+                svgcanvas.setAttribute('class', svgcanvas.getAttribute('class').replace('Column', ''));
+                column = null;
+                //column.setAttribute('class',  'column active');
+                
+              } else if (e.keyCode == 82) {
+                  //console.log('row', boxRow);
+
+                  for (var i = 0; i< rowSelection.length; i++) {
+                    rowSelection[i].setAttribute('class', "containerWSpace");
+                  }
+                  rowSelection = [];
+                  svgcanvas.setAttribute('class', svgcanvas.getAttribute('class').replace('Row', ''));
+              }
+
+          }, false);
+
+
+
+        }
 
 
 
 
-
-
-					//};
-
-
-
-//window.onload = function() {
-          //$(".containerWSpace").click(function(){
-
-            //var that = $(this).find('.container');
-            //console.log(that[0]);
-            //this.setAttribute("class", 'active'); 
-           
-           //var R = document.getElementById("Rect");
-            //this.setAttributeNS(null, "fill", "red");
-
-  //that.setAttributeNS(null, "fill", "blue");
-
-            //$(this).find('.container').setAttributeNS(null, "fill", "blue");
-            //$(this).find('.container').show();
-            //$('body').toggleClass("class", 'active'); 
-          //});
-
-//};
-
-
-
-				}
-
-
-
-
-			</script>
+      </script>
 			
+
+
+      <div class="containerInfo">
+        <table border>
+          <tr><th>Number</th><th>Content</th><th>Row</th><th>Column</th><th>Depth</th></tr>
+          <tr><td id="infoNumber">&nbsp;</td><td id="infoContent">&nbsp;</td><td id="infoRow">&nbsp;</td><td id="infoCol">&nbsp;</td><td id="infoDepth">&nbsp;</td></tr>          
+        </table>
+      </div>
+
 			
 	</body>
 </html>
